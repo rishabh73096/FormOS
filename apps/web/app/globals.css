@@ -1,50 +1,449 @@
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/* ── Tailwind v4 token mapping ──────────────────────────────────────────── */
+@theme inline {
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --color-background:  var(--background);
+  --color-foreground:  var(--foreground);
+  --color-card:        var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover:     var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary:     var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary:   var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted:       var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent:      var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border:      var(--border);
+  --color-input:       var(--input);
+  --color-ring:        var(--ring);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ── Light: Windows 95 ──────────────────────────────────────────────────── */
+:root {
+  --radius: 0px;
+  --background:            #c0c0c0;
+  --foreground:            #000000;
+  --card:                  #d4d0c8;
+  --card-foreground:       #000000;
+  --popover:               #d4d0c8;
+  --popover-foreground:    #000000;
+  --primary:               #000080;
+  --primary-foreground:    #ffffff;
+  --secondary:             #c0c0c0;
+  --secondary-foreground:  #000000;
+  --muted:                 #a8a8a8;
+  --muted-foreground:      #444444;
+  --accent:                #000080;
+  --accent-foreground:     #ffffff;
+  --destructive:           #cc0000;
+  --border:                #808080;
+  --input:                 #ffffff;
+  --ring:                  #000080;
+}
+
+/* ── Dark: CRT / Terminal ───────────────────────────────────────────────── */
+.dark {
+  --radius: 0px;
+  --background:            #0b0b10;
+  --foreground:            #c8d8f8;
+  --card:                  #10111e;
+  --card-foreground:       #c8d8f8;
+  --popover:               #10111e;
+  --popover-foreground:    #c8d8f8;
+  --primary:               #3b82f6;
+  --primary-foreground:    #000000;
+  --secondary:             #1a1b2e;
+  --secondary-foreground:  #c8d8f8;
+  --muted:                 #161728;
+  --muted-foreground:      #6070a0;
+  --accent:                #1e2040;
+  --accent-foreground:     #88aaff;
+  --destructive:           #ff4444;
+  --border:                #1e2244;
+  --input:                 #0d0e1a;
+  --ring:                  #3b82f6;
+}
+
+/* ── Base reset ─────────────────────────────────────────────────────────── */
+@layer base {
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans), 'Segoe UI', Tahoma, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
   }
 }
 
-html,
-body {
-  max-width: 100vw;
-  overflow-x: hidden;
+/* ── Win95 bevel helpers ─────────────────────────────────────────────────
+   Light bevel colours:
+     highlight = #ffffff (top/left edge)
+     shadow    = #808080 (inner dark)
+     dark      = #404040 (outer dark)
+     face      = #c0c0c0 (button face)
+──────────────────────────────────────────────────────────────────────── */
+
+/* Raised panel – looks like a button or card popping out */
+.win-raised {
+  background: #c0c0c0;
+  box-shadow:
+    inset  1px  1px 0 #ffffff,
+    inset -1px -1px 0 #404040,
+    inset  2px  2px 0 #e0ddd8,
+    inset -2px -2px 0 #808080;
+}
+.dark .win-raised {
+  background: #1a1b2e;
+  box-shadow:
+    inset  1px  1px 0 #2a2d4a,
+    inset -1px -1px 0 #030305,
+    inset  2px  2px 0 #1e2040,
+    inset -2px -2px 0 #050508;
 }
 
-body {
+/* Sunken / inset – looks like an input field or pressed area */
+.win-sunken {
+  background: #ffffff;
+  box-shadow:
+    inset  1px  1px 0 #404040,
+    inset -1px -1px 0 #ffffff,
+    inset  2px  2px 0 #808080,
+    inset -2px -2px 0 #e0ddd8;
+}
+.dark .win-sunken {
+  background: #0d0e1a;
+  box-shadow:
+    inset  1px  1px 0 #030305,
+    inset -1px -1px 0 #2a2d4a,
+    inset  2px  2px 0 #050508,
+    inset -2px -2px 0 #1a1d38;
+}
+
+/* Window outer shell */
+.win-window {
+  background: #c0c0c0;
+  box-shadow:
+    inset  1px  1px 0 #ffffff,
+    inset -1px -1px 0 #404040,
+    inset -2px -2px 0 #808080;
+}
+.dark .win-window {
+  background: #10111e;
+  box-shadow:
+    inset  1px  1px 0 #2a2d4a,
+    inset -1px -1px 0 #030305,
+    inset -2px -2px 0 #050508;
+}
+
+/* Title bar — blue gradient, flex row */
+.win-titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3px 4px 3px 6px;
+  background: linear-gradient(90deg, #000080 0%, #1084d0 100%);
+  user-select: none;
+  min-height: 20px;
+}
+.dark .win-titlebar {
+  background: linear-gradient(90deg, #1a2080 0%, #3b82f6 100%);
+}
+
+/* Title bar text */
+.win-titlebar-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* Title bar control buttons row */
+.win-titlebar-controls {
+  display: flex;
+  flex-direction: row;
+  gap: 2px;
+  flex-shrink: 0;
+  margin-left: 4px;
+}
+
+/* Individual control button (_, □, ✕) */
+.win-ctrl {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 14px;
+  font-size: 9px;
+  font-weight: bold;
+  color: #000000;
+  background: #c0c0c0;
+  cursor: pointer;
+  flex-shrink: 0;
+  box-shadow:
+    inset  1px  1px 0 #ffffff,
+    inset -1px -1px 0 #404040,
+    inset -2px -2px 0 #808080;
+}
+.dark .win-ctrl {
+  color: #c8d8f8;
+  background: #1a1b2e;
+  box-shadow:
+    inset  1px  1px 0 #2a2d4a,
+    inset -1px -1px 0 #030305,
+    inset -2px -2px 0 #050508;
+}
+
+/* Menu bar */
+.win-menubar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0;
+  padding: 1px 4px;
+  border-bottom: 1px solid #808080;
+  background: #c0c0c0;
+  font-size: 12px;
+}
+.dark .win-menubar {
+  background: #10111e;
+  border-bottom-color: #1e2244;
+}
+.win-menubar span {
+  display: inline-block;
+  padding: 1px 8px;
+  cursor: pointer;
   color: var(--foreground);
-  background: var(--background);
+  white-space: nowrap;
+}
+.win-menubar span:hover {
+  background: #000080;
+  color: #ffffff;
+}
+.dark .win-menubar span:hover {
+  background: #3b82f6;
+  color: #000000;
 }
 
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-a {
-  color: inherit;
+/* Win95 standard button */
+.win-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #c0c0c0;
+  color: #000000;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  white-space: nowrap;
+  border: none;
+  padding: 4px 12px;
+  box-shadow:
+    inset  1px  1px 0 #ffffff,
+    inset -1px -1px 0 #404040,
+    inset  2px  2px 0 #e0ddd8,
+    inset -2px -2px 0 #808080;
+  transition: none;
   text-decoration: none;
 }
-
-.imgDark {
-  display: none;
+.win-btn:active {
+  box-shadow:
+    inset  1px  1px 0 #404040,
+    inset -1px -1px 0 #ffffff,
+    inset  2px  2px 0 #808080,
+    inset -2px -2px 0 #e0ddd8;
+  padding: 5px 11px 3px 13px;
+}
+.dark .win-btn {
+  background: #1a1b2e;
+  color: #c8d8f8;
+  box-shadow:
+    inset  1px  1px 0 #2a2d4a,
+    inset -1px -1px 0 #030305,
+    inset  2px  2px 0 #1e2040,
+    inset -2px -2px 0 #050508;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
+/* Small toolbar variant */
+.win-btn-sm {
+  display: inline-flex;
+  align-items: center;
+  background: #c0c0c0;
+  color: #000000;
+  font-family: var(--font-mono), monospace;
+  font-size: 11px;
+  font-weight: bold;
+  cursor: pointer;
+  white-space: nowrap;
+  border: none;
+  padding: 2px 8px;
+  text-decoration: none;
+  box-shadow:
+    inset  1px  1px 0 #ffffff,
+    inset -1px -1px 0 #404040,
+    inset  2px  2px 0 #e0ddd8,
+    inset -2px -2px 0 #808080;
+}
+.dark .win-btn-sm {
+  background: #1a1b2e;
+  color: #c8d8f8;
+  box-shadow:
+    inset  1px  1px 0 #2a2d4a,
+    inset -1px -1px 0 #030305,
+    inset  2px  2px 0 #1e2040,
+    inset -2px -2px 0 #050508;
+}
 
-  .imgLight {
-    display: none;
-  }
-  .imgDark {
-    display: unset;
-  }
+/* Primary blue button */
+.win-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #000080;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  white-space: nowrap;
+  border: 2px solid;
+  border-top-color:    #4444cc;
+  border-left-color:   #4444cc;
+  border-bottom-color: #000044;
+  border-right-color:  #000044;
+  padding: 4px 14px;
+  text-decoration: none;
+  transition: filter 0.1s;
+}
+.win-btn-primary:hover { filter: brightness(1.2); }
+.dark .win-btn-primary {
+  background: #3b82f6;
+  color: #000000;
+  border-top-color:    #5577ff;
+  border-left-color:   #5577ff;
+  border-bottom-color: #1133aa;
+  border-right-color:  #1133aa;
+}
+
+/* Taskbar / status bar */
+.win-statusbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  background: #c0c0c0;
+  border-top: 1px solid #808080;
+  font-size: 11px;
+  padding: 2px 6px;
+  min-height: 18px;
+}
+.dark .win-statusbar {
+  background: #10111e;
+  border-top-color: #1e2244;
+}
+.win-status-panel {
+  padding: 0 6px;
+  box-shadow:
+    inset  1px  1px 0 #808080,
+    inset -1px -1px 0 #ffffff;
+  color: var(--foreground);
+}
+.dark .win-status-panel {
+  box-shadow:
+    inset  1px  1px 0 #050508,
+    inset -1px -1px 0 #2a2d4a;
+}
+
+/* Taskbar (fixed bottom/top bar like Win95) */
+.win-taskbar {
+  background: #c0c0c0;
+  box-shadow:
+    inset  1px  1px 0 #ffffff,
+    inset -1px -1px 0 #404040;
+}
+.dark .win-taskbar {
+  background: #0d0e1a;
+  box-shadow:
+    inset  1px  1px 0 #2a2d4a,
+    inset -1px -1px 0 #030305;
+}
+
+/* Horizontal separator */
+.win-separator {
+  height: 2px;
+  background: #808080;
+  box-shadow: 0 1px 0 #ffffff;
+  margin: 4px 0;
+}
+.dark .win-separator {
+  background: #1e2244;
+  box-shadow: 0 1px 0 #2a2d4a;
+}
+
+/* Tooltip / badge */
+.win-tag {
+  display: inline-block;
+  background: #ffffe1;
+  color: #000000;
+  border: 1px solid #000000;
+  font-size: 11px;
+  font-family: var(--font-mono), monospace;
+  padding: 1px 6px;
+}
+.dark .win-tag {
+  background: #1a1b2e;
+  color: #88aaff;
+  border-color: #3b82f6;
+}
+
+/* Blinking cursor */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+.cursor-blink { animation: blink 1.1s step-end infinite; }
+
+/* Scan-in animation */
+@keyframes scanIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-scan-in               { animation: scanIn 0.3s ease-out both; }
+.animate-scan-in.delay-100     { animation-delay: 0.1s; }
+.animate-scan-in.delay-200     { animation-delay: 0.2s; }
+.animate-scan-in.delay-300     { animation-delay: 0.3s; }
+
+/* CRT scanlines (dark only) */
+.dark .crt-overlay {
+  position: relative;
+}
+.dark .crt-overlay::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent 0px,
+    transparent 3px,
+    rgba(0, 0, 0, 0.04) 3px,
+    rgba(0, 0, 0, 0.04) 4px
+  );
 }

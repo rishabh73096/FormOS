@@ -1,5 +1,5 @@
 {
-  "name": "form-buider",
+  "name": "formos",
   "private": true,
   "scripts": {
     "build": "turbo run build",
